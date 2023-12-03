@@ -438,8 +438,13 @@ class CsvSeeder extends Seeder
 
         try
         {
-            DB::connection($this->connection)->table( $this->tablename )->insert( $this->parsedData );
-
+            foreach ($this->parsedData as $item) {
+                DB::connection($this->connection)->table($this->tablename)->updateOrInsert(
+                    ['id' => $item['id']], // Provide the condition to find the record
+                    $item // Provide the data to be updated or inserted
+                );
+            }
+            
             $this->parsedData = [];
         }
         catch (\Exception $e)
